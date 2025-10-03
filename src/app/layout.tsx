@@ -6,6 +6,27 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "FutBase - Super-app do Futebol de Base",
   description: "Matchmaking de amistosos, arbitragem e mídia integrada para o futebol de base brasileiro",
+  manifest: "/manifest.json",
+  themeColor: "#10b981",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "FutBase",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "FutBase",
+    title: "FutBase - Super-app do Futebol de Base",
+    description: "Matchmaking de amistosos, arbitragem e mídia integrada para o futebol de base brasileiro",
+  },
+  twitter: {
+    card: "summary",
+    title: "FutBase - Super-app do Futebol de Base",
+    description: "Matchmaking de amistosos, arbitragem e mídia integrada para o futebol de base brasileiro",
+  },
 };
 
 export default function RootLayout({
@@ -17,9 +38,56 @@ export default function RootLayout({
     <html lang="pt-BR">
       <head>
         <Script src="/lasy-bridge.js" strategy="beforeInteractive" />
+        
+        {/* PWA Meta Tags */}
+        <meta name="application-name" content="FutBase" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="FutBase" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="msapplication-TileColor" content="#10b981" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="theme-color" content="#10b981" />
+
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" href="/icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png" />
+
+        {/* Favicon */}
+        <link rel="icon" type="image/png" sizes="32x32" href="/icon-72x72.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icon-72x72.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="mask-icon" href="/icon.svg" color="#10b981" />
+        <link rel="shortcut icon" href="/icon-72x72.png" />
+
+        {/* Microsoft */}
+        <meta name="msapplication-TileImage" content="/icon-144x144.png" />
+        
+        {/* Viewport */}
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover" />
       </head>
       <body className="font-geist-sans antialiased">
         {children}
+        
+        {/* Service Worker Registration */}
+        <Script id="sw-register" strategy="afterInteractive">
+          {`
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                  .then(function(registration) {
+                    console.log('SW registered: ', registration);
+                  })
+                  .catch(function(registrationError) {
+                    console.log('SW registration failed: ', registrationError);
+                  });
+              });
+            }
+          `}
+        </Script>
       </body>
     </html>
   );
